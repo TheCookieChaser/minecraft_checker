@@ -216,7 +216,7 @@ namespace WindowsFormsApp2
             open_file_dialog2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             if (open_file_dialog2.ShowDialog() == DialogResult.OK)
             {
-                proxylist = System.IO.File.ReadAllLines(open_file_dialog2.FileName);
+                proxylist = File.ReadAllLines(open_file_dialog2.FileName);
                 proxieslabel.Text = proxylist.Count().ToString();
             }
         }
