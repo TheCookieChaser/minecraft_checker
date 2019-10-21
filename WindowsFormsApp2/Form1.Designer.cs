@@ -38,7 +38,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.comboslabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,6 +51,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.savetofilebutton = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -108,11 +112,11 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader6});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 76);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(599, 409);
+            this.listView1.Size = new System.Drawing.Size(741, 409);
             this.listView1.TabIndex = 8;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -133,13 +137,13 @@
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Secured";
-            this.columnHeader4.Width = 69;
+            this.columnHeader4.Text = "Hypixel Level";
+            this.columnHeader4.Width = 78;
             // 
-            // columnHeader5
+            // columnHeader6
             // 
-            this.columnHeader5.Text = "Hypixel Level";
-            this.columnHeader5.Width = 79;
+            this.columnHeader6.Text = "Hypixel Rank";
+            this.columnHeader6.Width = 114;
             // 
             // comboslabel
             // 
@@ -225,7 +229,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(549, 30);
+            this.textBox1.Location = new System.Drawing.Point(552, 15);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(59, 20);
             this.textBox1.TabIndex = 21;
@@ -234,7 +238,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(494, 32);
+            this.label6.Location = new System.Drawing.Point(497, 19);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(49, 13);
             this.label6.TabIndex = 22;
@@ -250,11 +254,54 @@
             this.savetofilebutton.UseVisualStyleBackColor = true;
             this.savetofilebutton.Click += new System.EventHandler(this.savetofilebutton_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(626, 48);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(127, 17);
+            this.checkBox1.TabIndex = 26;
+            this.checkBox1.Text = "Check Multiple Times";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(497, 50);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.TabIndex = 28;
+            this.label7.Text = "Start at:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(552, 46);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(59, 20);
+            this.textBox2.TabIndex = 27;
+            this.textBox2.Text = "0";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "HTTP",
+            "SOCKS4",
+            "SOCKS5"});
+            this.comboBox1.Location = new System.Drawing.Point(626, 12);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(623, 497);
+            this.ClientSize = new System.Drawing.Size(771, 497);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.savetofilebutton);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox1);
@@ -298,13 +345,17 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label checkedproxies;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label hitslabel;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button savetofilebutton;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

