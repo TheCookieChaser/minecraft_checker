@@ -32,7 +32,14 @@ namespace WindowsFormsApp2
         private Object sync = new object();
         private int account_counter = 0;
         private int proxy_counter = 0;
-        public List<string> hits = new List<string>();
+
+        public List<string> normal_hits = new List<string>();
+        public List<string> vip_hits = new List<string>();
+        public List<string> vip_plus_hits = new List<string>();
+        public List<string> mvp_hits = new List<string>();
+        public List<string> mvp_plus_hits = new List<string>();
+        public List<string> hypixel_leveled_hits = new List<string>();
+
 
         private int convert_to_level(double exp)
         {
@@ -132,20 +139,113 @@ namespace WindowsFormsApp2
 
                         var hit_string = login[0] + ":" + login[1] + " | " + name + " | Level: " + hypixel_level + " | Rank: " + hypixel_rank;
 
-                        if (!hits.Contains(hit_string))
+                        if (hypixel_rank.Contains("VIP"))
                         {
-                            var lvi = new ListViewItem();
-                            lvi.Text = login[0];
-                            lvi.SubItems.Add(login[1]);
-                            lvi.SubItems.Add(Convert.ToString(name));
-                            //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
-                            lvi.SubItems.Add(Convert.ToString(hypixel_level));
-                            lvi.SubItems.Add(hypixel_rank);
+                            if (!vip_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
 
-                            listView1.Items.Add(lvi);
-                            hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
 
-                            hits.Add(hit_string);
+                                vip_hits.Add(hit_string);
+                            }
+                        }
+                        else if(hypixel_rank.Contains("VIP_PLUS"))
+                        {
+                            if (!vip_plus_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
+
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                                vip_plus_hits.Add(hit_string);
+                            }
+                        }
+                        else if(hypixel_rank.Contains("MVP"))
+                        {
+                            if (!mvp_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
+
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                                mvp_hits.Add(hit_string);
+                            }
+                        }
+                        else if(hypixel_rank.Contains("MVP_PLUS"))
+                        {
+                            if (!mvp_plus_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
+
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                                mvp_plus_hits.Add(hit_string);
+                            }
+                        }
+                        else if (hypixel_level >= 20)
+                        {
+                            if (!hypixel_leveled_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
+
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                                hypixel_leveled_hits.Add(hit_string);
+                            }
+                        }
+                        else
+                        {
+                            if (!normal_hits.Contains(hit_string))
+                            {
+                                var lvi = new ListViewItem();
+                                lvi.Text = login[0];
+                                lvi.SubItems.Add(login[1]);
+                                lvi.SubItems.Add(Convert.ToString(name));
+                                //lvi.SubItems.Add(Convert.ToString(json_data["user"]["secured"]));
+                                lvi.SubItems.Add(Convert.ToString(hypixel_level));
+                                lvi.SubItems.Add(hypixel_rank);
+
+                                listView1.Items.Add(lvi);
+                                hitslabel.Text = (Convert.ToInt32(hitslabel.Text) + 1).ToString();
+
+                                normal_hits.Add(hit_string);
+                            }
                         }
                     }
                     //else if (!checkBox1.Checked)
@@ -210,9 +310,12 @@ namespace WindowsFormsApp2
             }
         }
 
+        public string directory_name = string.Empty;
         private void button1_Click(object sender, EventArgs e)
         {
             Directory.CreateDirectory("hits");
+            directory_name = "hits\\" + DateTime.Now.ToString("MM_dd_yyyy h_mm");
+            Directory.CreateDirectory(directory_name);
 
             is_stopping = false;
             account_counter = Convert.ToInt32(textBox2.Text);
@@ -270,7 +373,18 @@ namespace WindowsFormsApp2
 
         private void savetofilebutton_Click(object sender, EventArgs e)
         {
-            File.WriteAllLines("hits\\" + DateTime.Now.ToString("MM_dd_yyyy h_mm") + ".txt", hits);
+            if (normal_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\NFA_SFA.txt", normal_hits);
+            if (vip_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\VIP.txt", vip_hits);
+            if (vip_plus_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\VIP+.txt", vip_plus_hits);
+            if (mvp_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\MVP.txt", mvp_hits);
+            if (mvp_plus_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\MVP+.txt", mvp_plus_hits);
+            if (hypixel_leveled_hits.Count > 0)
+                File.WriteAllLines(directory_name + "\\Level 20+.txt", hypixel_leveled_hits);
         }
     }
 }
